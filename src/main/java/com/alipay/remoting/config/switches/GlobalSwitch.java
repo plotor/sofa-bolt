@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting.config.switches;
 
-import java.util.BitSet;
-
 import com.alipay.remoting.config.ConfigManager;
+
+import java.util.BitSet;
 
 /**
  * Global switches used in client or server
@@ -28,25 +29,29 @@ import com.alipay.remoting.config.ConfigManager;
  * 2. user settings will only take effect in the current instance of bolt client or server.
  * <p/>
  *
+ * 全局开关：全局的设置，比如是否需要管理连接对象、是否需要执行重连任务等等
+ *
  * @author tsui
  * @version $Id: GlobalSwitch.java, v 0.1 2017-08-03 15:50 tsui Exp $
  */
 public class GlobalSwitch implements Switch {
 
-    // switches
-    public static final int CONN_RECONNECT_SWITCH           = 0;
-    public static final int CONN_MONITOR_SWITCH             = 1;
+    /* switches */
+
+    // 控制是否开启自动重连机制
+    public static final int CONN_RECONNECT_SWITCH = 0;
+    public static final int CONN_MONITOR_SWITCH = 1;
     public static final int SERVER_MANAGE_CONNECTION_SWITCH = 2;
-    public static final int SERVER_SYNC_STOP                = 3;
-    public static final int CODEC_FLUSH_CONSOLIDATION       = 4;
+    public static final int SERVER_SYNC_STOP = 3;
+    public static final int CODEC_FLUSH_CONSOLIDATION = 4;
 
     /** user settings */
-    private BitSet          userSettings                    = new BitSet();
+    private BitSet userSettings = new BitSet();
 
     /**
      * Init with system default value
-     *   if settings exist by system property then use system property at first;
-     *   if no settings exist by system property then use default value in {@link com.alipay.remoting.config.Configs}
+     * if settings exist by system property then use system property at first;
+     * if no settings exist by system property then use default value in {@link com.alipay.remoting.config.Configs}
      * All these settings can be overwrite by user api settings.
      */
     public GlobalSwitch() {

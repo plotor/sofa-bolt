@@ -14,14 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
 
 /**
  * Event triggered by connection state.
- * 
+ *
+ * 连接事件类型
+ *
  * @author jiangping
  * @version $Id: ConnectionEventType.java, v 0.1 Mar 4, 2016 8:03:27 PM tao Exp $
  */
 public enum ConnectionEventType {
-    CONNECT, CONNECT_FAILED, CLOSE, EXCEPTION;
+    CONNECT,
+    CONNECT_FAILED,
+    CLOSE,
+    EXCEPTION;
 }

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
 
 import java.util.ArrayList;
@@ -22,17 +23,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Listen and dispatch connection events.
+ *
+ * 连接事件监听器：监听连接事件的触发，然后执行对应的逻辑
+ *
  * @author jiangping
  * @version $Id: DefaultConnectionEventListener.java, v 0.1 Mar 5, 2016 10:56:20 AM tao Exp $
  */
 public class ConnectionEventListener {
 
-    private ConcurrentHashMap<ConnectionEventType, List<ConnectionEventProcessor>> processors = new ConcurrentHashMap<ConnectionEventType, List<ConnectionEventProcessor>>(
-                                                                                                  3);
+    private ConcurrentHashMap<ConnectionEventType, List<ConnectionEventProcessor>> processors = new ConcurrentHashMap<ConnectionEventType, List<ConnectionEventProcessor>>(3);
 
     /**
      * Dispatch events.
-     * 
+     *
+     * 触发事件
+     *
      * @param type ConnectionEventType
      * @param remoteAddress remoting address
      * @param connection Connection
@@ -48,12 +53,13 @@ public class ConnectionEventListener {
 
     /**
      * Add event processor.
-     * 
+     *
+     * 注册事件处理器
+     *
      * @param type ConnectionEventType
      * @param processor ConnectionEventProcessor
      */
-    public void addConnectionEventProcessor(ConnectionEventType type,
-                                            ConnectionEventProcessor processor) {
+    public void addConnectionEventProcessor(ConnectionEventType type, ConnectionEventProcessor processor) {
         List<ConnectionEventProcessor> processorList = this.processors.get(type);
         if (processorList == null) {
             this.processors.putIfAbsent(type, new ArrayList<ConnectionEventProcessor>(1));

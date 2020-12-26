@@ -14,7 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
+
+import com.alipay.remoting.config.switches.GlobalSwitch;
+import com.alipay.remoting.log.BoltLoggerFactory;
+import com.alipay.remoting.util.RemotingUtil;
+import com.alipay.remoting.util.StringUtils;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
+import io.netty.util.Attribute;
+import org.slf4j.Logger;
 
 import java.net.SocketAddress;
 import java.util.concurrent.ExecutorService;
@@ -22,39 +35,31 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-
-import com.alipay.remoting.config.switches.GlobalSwitch;
-import com.alipay.remoting.log.BoltLoggerFactory;
-import com.alipay.remoting.util.RemotingUtil;
-import com.alipay.remoting.util.StringUtils;
-
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
-import io.netty.util.Attribute;
-
 /**
  * Log the channel status event.
- * 
+ *
  * @author jiangping
  * @version $Id: ConnectionEventHandler.java, v 0.1 Oct 10, 2016 2:07:24 PM tao Exp $
  */
 @Sharable
 public class ConnectionEventHandler extends ChannelDuplexHandler {
-    private static final Logger     logger = BoltLoggerFactory.getLogger("ConnectionEvent");
 
-    private ConnectionManager       connectionManager;
+    private static final Logger logger = BoltLoggerFactory.getLogger("ConnectionEvent");
 
+    /** 连接管理器 */
+    private ConnectionManager connectionManager;
+
+    /** 连接事件监听器 */
     private ConnectionEventListener eventListener;
 
+    /** 连接事件执行器 */
     private ConnectionEventExecutor eventExecutor;
 
-    private Reconnector             reconnectManager;
+    /** 重连管理器 */
+    private Reconnector reconnectManager;
 
-    private GlobalSwitch            globalSwitch;
+    /** 全局开关 */
+    private GlobalSwitch globalSwitch;
 
     public ConnectionEventHandler() {
 
@@ -72,9 +77,9 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
                         SocketAddress localAddress, ChannelPromise promise) throws Exception {
         if (logger.isInfoEnabled()) {
             final String local = localAddress == null ? null : RemotingUtil
-                .parseSocketAddressToString(localAddress);
+                    .parseSocketAddressToString(localAddress);
             final String remote = remoteAddress == null ? "UNKNOWN" : RemotingUtil
-                .parseSocketAddressToString(remoteAddress);
+                    .parseSocketAddressToString(remoteAddress);
             if (local == null) {
                 if (logger.isInfoEnabled()) {
                     logger.info("Try connect to {}", remote);
@@ -122,7 +127,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         infoLog("Connection channel unregistered: {}",
-            RemotingUtil.parseRemoteAddress(ctx.channel()));
+                RemotingUtil.parseRemoteAddress(ctx.channel()));
         super.channelUnregistered(ctx);
     }
 
@@ -154,8 +159,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
             ConnectionEventType eventType = (ConnectionEventType) event;
             Channel channel = ctx.channel();
             if (channel == null) {
-                logger
-                    .warn(
+                logger.warn(
                         "channel null when handle user triggered event in ConnectionEventHandler! eventType: {}",
                         eventType.name());
                 return;
@@ -163,8 +167,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
             Connection connection = channel.attr(Connection.CONNECTION).get();
             if (connection == null) {
-                logger
-                    .error(
+                logger.error(
                         "[BUG]connection is null when handle user triggered event in ConnectionEventHandler! eventType: {}",
                         eventType.name());
                 return;
@@ -172,13 +175,12 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
             final String remoteAddress = RemotingUtil.parseRemoteAddress(ctx.channel());
             final String localAddress = RemotingUtil.parseLocalAddress(ctx.channel());
-            logger.info("trigger user event, local[{}], remote[{}], event: {}", localAddress,
-                remoteAddress, eventType.name());
+            logger.info("trigger user event, local[{}], remote[{}], event: {}", localAddress, remoteAddress, eventType.name());
 
             switch (eventType) {
                 case CONNECT:
                     onEvent(connection, connection.getUrl().getOriginUrl(),
-                        ConnectionEventType.CONNECT);
+                            ConnectionEventType.CONNECT);
                     break;
                 case CONNECT_FAILED:
                 case CLOSE:
@@ -199,8 +201,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         final String remoteAddress = RemotingUtil.parseRemoteAddress(ctx.channel());
         final String localAddress = RemotingUtil.parseLocalAddress(ctx.channel());
-        logger
-            .warn(
+        logger.warn(
                 "ExceptionCaught in connection: local[{}], remote[{}], close the connection! Cause[{}:{}]",
                 localAddress, remoteAddress, cause.getClass().getSimpleName(), cause.getMessage());
         ctx.channel().close();
@@ -247,6 +248,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     /**
      * please use {@link ConnectionEventHandler#setReconnector(Reconnector)} instead
+     *
      * @param reconnectManager value to be assigned to property reconnectManager
      */
     @Deprecated
@@ -260,19 +262,21 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     /**
      * Dispatch connection event.
-     * 
+     *
+     * 连接事件执行器：包装后的线程池，用于异步触发连接事件监听器来处理对应的连接事件，值得一提的是，这个线程池只有一个线程。
+     *
      * @author jiangping
      * @version $Id: ConnectionEventExecutor.java, v 0.1 Mar 4, 2016 9:20:15 PM tao Exp $
      */
     public class ConnectionEventExecutor {
-        Logger          logger   = BoltLoggerFactory.getLogger("CommonDefault");
+        Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
         ExecutorService executor = new ThreadPoolExecutor(1, 1, 60L, TimeUnit.SECONDS,
-                                     new LinkedBlockingQueue<Runnable>(10000),
-                                     new NamedThreadFactory("Bolt-conn-event-executor", true));
+                new LinkedBlockingQueue<Runnable>(10000),
+                new NamedThreadFactory("Bolt-conn-event-executor", true));
 
         /**
          * Process event.
-         * 
+         *
          * @param runnable Runnable
          */
         public void onEvent(Runnable runnable) {

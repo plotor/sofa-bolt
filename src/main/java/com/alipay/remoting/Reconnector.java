@@ -14,10 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
 
 /**
  * Reconnect manager interface.
+ *
+ * 重连管理器：管理重连的 Url 对象以及执行重连任务
  *
  * @author chengyi (mark.lx@antfin.com) 2018-11-05 17:43
  */

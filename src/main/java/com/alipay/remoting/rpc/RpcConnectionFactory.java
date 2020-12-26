@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting.rpc;
 
-import java.util.concurrent.ConcurrentHashMap;
+package com.alipay.remoting.rpc;
 
 import com.alipay.remoting.config.ConfigurableInstance;
 import com.alipay.remoting.connection.DefaultConnectionFactory;
 import com.alipay.remoting.rpc.protocol.UserProcessor;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Default RPC connection factory impl.
@@ -31,7 +32,9 @@ public class RpcConnectionFactory extends DefaultConnectionFactory {
 
     public RpcConnectionFactory(ConcurrentHashMap<String, UserProcessor<?>> userProcessors,
                                 ConfigurableInstance configInstance) {
-        super(new RpcCodec(), new HeartbeatHandler(), new RpcHandler(userProcessors),
-            configInstance);
+        super(new RpcCodec(),
+                new HeartbeatHandler(),
+                new RpcHandler(userProcessors),
+                configInstance);
     }
 }

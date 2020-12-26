@@ -14,34 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
+
+import com.alipay.remoting.log.BoltLoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.slf4j.Logger;
-
-import com.alipay.remoting.log.BoltLoggerFactory;
-
 /**
  * Reconnect manager.
+ *
+ * 重连管理器，主要逻辑如下：
+ *
+ * - 判断重连线程是否开启，这主要会考虑到 ReconnectManager 退出逻辑，在 ReconnectManager 对象销毁时会中断重连工作的线程。
+ * - 判断时间间隔，因为要控制重连任务的执行速度，所以需要对上一次重连的时间间隔和设定的阈值做比较，这个阈值是 1s，如果上一次重连任务的执行速度没有超过 1s，就会 Sleep 线程 1s。
+ * - 从重连任务的阻塞队列中尝试获取任务，如果没有获取到，线程会阻塞。
+ * - 检查任务是否有效，是否已经取消，如果没有取消，就会执行重连任务。
+ * - 如果捕捉到异常，不会取消这个重连任务，而是重新将它添加到任务队列里。
  *
  * @author yunliang.shi
  * @version $Id: ReconnectManager.java, v 0.1 Mar 11, 2016 5:20:50 PM yunliang.shi Exp $
  */
 public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
 
-    private static final Logger                      logger                   = BoltLoggerFactory
-                                                                                  .getLogger("CommonDefault");
+    private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
 
-    private static final int                         HEAL_CONNECTION_INTERVAL = 1000;
+    private static final int HEAL_CONNECTION_INTERVAL = 1000;
 
-    private final ConnectionManager                  connectionManager;
+    private final ConnectionManager connectionManager;
     private final LinkedBlockingQueue<ReconnectTask> tasks;
-    private final List<Url>                          canceled;
+    private final List<Url> canceled;
 
-    private Thread                                   healConnectionThreads;
+    private Thread healConnectionThreads;
 
     public ReconnectManager(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
@@ -154,7 +161,7 @@ public class ReconnectManager extends AbstractLifeCycle implements Reconnector {
                         task.run();
                     } else {
                         logger.warn("Invalid reconnect request task {}, cancel list size {}",
-                            task.url, canceled.size());
+                                task.url, canceled.size());
                     }
                     this.lastConnectTime = System.currentTimeMillis() - start;
                 } catch (Exception e) {
