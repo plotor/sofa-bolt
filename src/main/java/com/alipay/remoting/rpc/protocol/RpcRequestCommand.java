@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting.rpc.protocol;
 
-import java.io.UnsupportedEncodingException;
+package com.alipay.remoting.rpc.protocol;
 
 import com.alipay.remoting.CustomSerializer;
 import com.alipay.remoting.CustomSerializerManager;
@@ -28,22 +27,24 @@ import com.alipay.remoting.rpc.RequestCommand;
 import com.alipay.remoting.serialization.SerializerManager;
 import com.alipay.remoting.util.IDGenerator;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Request command for Rpc.
- * 
+ *
  * @author jiangping
  * @version $Id: RpcRequestCommand.java, v 0.1 2015-9-25 PM2:13:35 tao Exp $
  */
 public class RpcRequestCommand extends RequestCommand {
-    /** For serialization  */
+    /** For serialization */
     private static final long serialVersionUID = -4602613826188210946L;
-    private Object            requestObject;
-    private String            requestClass;
+    private Object requestObject;
+    private String requestClass;
 
-    private CustomSerializer  customSerializer;
-    private Object            requestHeader;
+    private CustomSerializer customSerializer;
+    private Object requestHeader;
 
-    private transient long    arriveTime       = -1;
+    private transient long arriveTime = -1;
 
     /**
      * create request command without id
@@ -54,6 +55,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * create request command with id and request object
+     *
      * @param request request object
      */
     public RpcRequestCommand(Object request) {
@@ -70,7 +72,7 @@ public class RpcRequestCommand extends RequestCommand {
                 this.setClazz(clz);
             } catch (UnsupportedEncodingException e) {
                 throw new SerializationException("Unsupported charset: " + Configs.DEFAULT_CHARSET,
-                    e);
+                        e);
             }
         }
     }
@@ -82,7 +84,7 @@ public class RpcRequestCommand extends RequestCommand {
                 this.setRequestClass(new String(this.getClazz(), Configs.DEFAULT_CHARSET));
             } catch (UnsupportedEncodingException e) {
                 throw new DeserializationException("Unsupported charset: "
-                                                   + Configs.DEFAULT_CHARSET, e);
+                        + Configs.DEFAULT_CHARSET, e);
             }
         }
     }
@@ -96,7 +98,7 @@ public class RpcRequestCommand extends RequestCommand {
                 throw e;
             } catch (Exception e) {
                 throw new SerializationException(
-                    "Exception caught when serialize header of rpc request command!", e);
+                        "Exception caught when serialize header of rpc request command!", e);
             }
         }
     }
@@ -111,7 +113,7 @@ public class RpcRequestCommand extends RequestCommand {
                     throw e;
                 } catch (Exception e) {
                     throw new DeserializationException(
-                        "Exception caught when deserialize header of rpc request command!", e);
+                            "Exception caught when deserialize header of rpc request command!", e);
                 }
             }
         }
@@ -122,17 +124,17 @@ public class RpcRequestCommand extends RequestCommand {
         if (this.requestObject != null) {
             try {
                 if (this.getCustomSerializer() != null
-                    && this.getCustomSerializer().serializeContent(this, invokeContext)) {
+                        && this.getCustomSerializer().serializeContent(this, invokeContext)) {
                     return;
                 }
 
                 this.setContent(SerializerManager.getSerializer(this.getSerializer()).serialize(
-                    this.requestObject));
+                        this.requestObject));
             } catch (SerializationException e) {
                 throw e;
             } catch (Exception e) {
                 throw new SerializationException(
-                    "Exception caught when serialize content of rpc request command!", e);
+                        "Exception caught when serialize content of rpc request command!", e);
             }
         }
     }
@@ -141,26 +143,28 @@ public class RpcRequestCommand extends RequestCommand {
     public void deserializeContent(InvokeContext invokeContext) throws DeserializationException {
         if (this.getRequestObject() == null) {
             try {
+                // 优先使用用户自定义了 CustomSerializer
                 if (this.getCustomSerializer() != null
-                    && this.getCustomSerializer().deserializeContent(this)) {
+                        && this.getCustomSerializer().deserializeContent(this)) {
                     return;
                 }
+                // 否则使用自带的序列化器
                 if (this.getContent() != null) {
                     this.setRequestObject(SerializerManager.getSerializer(this.getSerializer())
-                        .deserialize(this.getContent(), this.requestClass));
+                            .deserialize(this.getContent(), this.requestClass));
                 }
             } catch (DeserializationException e) {
                 throw e;
             } catch (Exception e) {
                 throw new DeserializationException(
-                    "Exception caught when deserialize content of rpc request command!", e);
+                        "Exception caught when deserialize content of rpc request command!", e);
             }
         }
     }
 
     /**
      * Getter method for property <tt>requestObject</tt>.
-     * 
+     *
      * @return property value of requestObject
      */
     public Object getRequestObject() {
@@ -169,7 +173,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Setter method for property <tt>requestObject</tt>.
-     * 
+     *
      * @param requestObject value to be assigned to property requestObject
      */
     public void setRequestObject(Object requestObject) {
@@ -178,7 +182,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Getter method for property <tt>requestHeader</tt>.
-     * 
+     *
      * @return property value of requestHeader
      */
     public Object getRequestHeader() {
@@ -187,7 +191,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Setter method for property <tt>requestHeader</tt>.
-     * 
+     *
      * @param requestHeader value to be assigned to property requestHeader
      */
     public void setRequestHeader(Object requestHeader) {
@@ -196,7 +200,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Getter method for property <tt>requestClass</tt>.
-     * 
+     *
      * @return property value of requestClass
      */
     public String getRequestClass() {
@@ -205,7 +209,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Setter method for property <tt>requestClass</tt>.
-     * 
+     *
      * @param requestClass value to be assigned to property requestClass
      */
     public void setRequestClass(String requestClass) {
@@ -214,7 +218,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Getter method for property <tt>customSerializer</tt>.
-     * 
+     *
      * @return property value of customSerializer
      */
     public CustomSerializer getCustomSerializer() {
@@ -232,7 +236,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Getter method for property <tt>arriveTime</tt>.
-     * 
+     *
      * @return property value of arriveTime
      */
     public long getArriveTime() {
@@ -241,7 +245,7 @@ public class RpcRequestCommand extends RequestCommand {
 
     /**
      * Setter method for property <tt>arriveTime</tt>.
-     * 
+     *
      * @param arriveTime value to be assigned to property arriveTime
      */
     public void setArriveTime(long arriveTime) {

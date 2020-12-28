@@ -14,16 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting;
 
-import java.io.Serializable;
+package com.alipay.remoting;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.Serializable;
+
 /**
  * Encode command.
- * 
+ *
+ * 协议命令编码器
+ *
  * @author jiangping
  * @version $Id: CommandEncoder.java, v 0.1 Mar 10, 2016 11:33:02 AM jiangping Exp $
  */
@@ -31,7 +34,7 @@ public interface CommandEncoder {
 
     /**
      * Encode object into bytes.
-     * 
+     *
      * @param ctx
      * @param msg
      * @param out

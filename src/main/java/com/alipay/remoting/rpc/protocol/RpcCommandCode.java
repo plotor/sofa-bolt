@@ -14,18 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting.rpc.protocol;
 
 import com.alipay.remoting.CommandCode;
 
 /**
  * Command code for rpc remoting command.
+ *
  * @author jiangping
  * @version $Id: RpcCommandCode.java, v 0.1 2015-9-21 PM5:05:59 tao Exp $
  */
 public enum RpcCommandCode implements CommandCode {
 
-    RPC_REQUEST((short) 1), RPC_RESPONSE((short) 2);
+    RPC_REQUEST((short) 1),
+    RPC_RESPONSE((short) 2);
 
     private short value;
 

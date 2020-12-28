@@ -14,14 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting.rpc.protocol;
 
-import java.util.concurrent.Executor;
+package com.alipay.remoting.rpc.protocol;
 
 import com.alipay.remoting.AsyncContext;
 import com.alipay.remoting.BizContext;
 import com.alipay.remoting.LifeCycle;
 import com.alipay.remoting.RemotingContext;
+
+import java.util.concurrent.Executor;
 
 /**
  * Defined all functions for biz to process user defined request.
@@ -42,6 +43,7 @@ public interface UserProcessor<T> extends LifeCycle {
 
     /**
      * Handle request with {@link AsyncContext}.
+     *
      * @param bizCtx biz context
      * @param asyncCtx async context
      * @param request request
@@ -50,6 +52,7 @@ public interface UserProcessor<T> extends LifeCycle {
 
     /**
      * Handle request in sync way.
+     *
      * @param bizCtx biz context
      * @param request request
      */
@@ -65,12 +68,14 @@ public interface UserProcessor<T> extends LifeCycle {
 
     /**
      * Get user executor.
+     *
      * @return executor
      */
     Executor getExecutor();
 
     /**
      * Get business class loader
+     *
      * @return ClassLoader
      */
     ClassLoader getBizClassLoader();
@@ -78,6 +83,7 @@ public interface UserProcessor<T> extends LifeCycle {
     /**
      * Whether deserialize and process biz logic in io thread.
      * Notice: If return true, this will have a strong impact on performance.
+     *
      * @return true for processing in io thread
      */
     boolean processInIOThread();
@@ -94,12 +100,14 @@ public interface UserProcessor<T> extends LifeCycle {
 
     /**
      * Use this method to set executor selector.
+     *
      * @param executorSelector executor selector
      */
     void setExecutorSelector(ExecutorSelector executorSelector);
 
     /**
      * Use this method to get the executor selector.
+     *
      * @return executor selector
      */
     ExecutorSelector getExecutorSelector();

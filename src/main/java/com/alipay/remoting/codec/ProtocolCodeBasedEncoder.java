@@ -14,25 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting.codec;
 
-import java.io.Serializable;
+package com.alipay.remoting.codec;
 
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.Protocol;
 import com.alipay.remoting.ProtocolCode;
 import com.alipay.remoting.ProtocolManager;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.Attribute;
 
+import java.io.Serializable;
+
 /**
  * Protocol code based newEncoder, the main newEncoder for a certain protocol, which is lead by one or multi bytes (magic code).
  *
  * Notice: this is stateless can be noted as {@link io.netty.channel.ChannelHandler.Sharable}
+ *
  * @author jiangping
  * @version $Id: ProtocolCodeBasedEncoder.java, v 0.1 2015-12-11 PM 7:30:30 tao Exp $
  */
@@ -49,7 +50,8 @@ public class ProtocolCodeBasedEncoder extends MessageToByteEncoder<Serializable>
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Serializable msg, ByteBuf out)
-                                                                                   throws Exception {
+            throws Exception {
+        // 从 channel 的附加属性中获取协议标识 ProtocolCode
         Attribute<ProtocolCode> att = ctx.channel().attr(Connection.PROTOCOL);
         ProtocolCode protocolCode;
         if (att == null || att.get() == null) {
@@ -57,6 +59,7 @@ public class ProtocolCodeBasedEncoder extends MessageToByteEncoder<Serializable>
         } else {
             protocolCode = att.get();
         }
+        // 获取对应的 CommandEncoder 执行编码逻辑
         Protocol protocol = ProtocolManager.getProtocol(protocolCode);
         protocol.getEncoder().encode(ctx, msg, out);
     }

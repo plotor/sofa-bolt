@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.alipay.remoting.RemotingCommand</OriginalElement>
+  <nodes>
+    <node x="0.0" y="340.0">com.alipay.remoting.rpc.protocol.RpcRequestCommand</node>
+    <node x="563.75" y="255.0">com.alipay.remoting.rpc.ResponseCommand</node>
+    <node x="366.375" y="170.0">com.alipay.remoting.rpc.RpcCommand</node>
+    <node x="343.875" y="85.0">com.alipay.remoting.RemotingCommand</node>
+    <node x="221.0" y="340.0">com.alipay.remoting.rpc.HeartbeatCommand</node>
+    <node x="663.0" y="340.0">com.alipay.remoting.rpc.HeartbeatAckCommand</node>
+    <node x="433.0" y="340.0">com.alipay.remoting.rpc.protocol.RpcResponseCommand</node>
+    <node x="121.75" y="255.0">com.alipay.remoting.rpc.RequestCommand</node>
+    <node x="357.375" y="0.0">java.io.Serializable</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.alipay.remoting.rpc.protocol.RpcResponseCommand" target="com.alipay.remoting.rpc.ResponseCommand">
+      <point x="0.0" y="-17.5" />
+      <point x="538.0" y="315.0" />
+      <point x="609.5" y="315.0" />
+      <point x="-45.75" y="17.5" />
+    </edge>
+    <edge source="com.alipay.remoting.RemotingCommand" target="java.io.Serializable">
+      <point x="0.0" y="-17.5" />
+      <point x="0.0" y="17.5" />
+    </edge>
+    <edge source="com.alipay.remoting.rpc.RequestCommand" target="com.alipay.remoting.rpc.RpcCommand">
+      <point x="0.0" y="-17.5" />
+      <point x="208.75" y="230.0" />
+      <point x="400.875" y="230.0" />
+      <point x="-34.5" y="17.5" />
+    </edge>
+    <edge source="com.alipay.remoting.rpc.HeartbeatAckCommand" target="com.alipay.remoting.rpc.ResponseCommand">
+      <point x="0.0" y="-17.5" />
+      <point x="772.5" y="315.0" />
+      <point x="701.0" y="315.0" />
+      <point x="45.75" y="17.5" />
+    </edge>
+    <edge source="com.alipay.remoting.rpc.HeartbeatCommand" target="com.alipay.remoting.rpc.RequestCommand">
+      <point x="0.0" y="-17.5" />
+      <point x="317.0" y="315.0" />
+      <point x="252.25" y="315.0" />
+      <point x="43.5" y="17.5" />
+    </edge>
+    <edge source="com.alipay.remoting.rpc.RpcCommand" target="com.alipay.remoting.RemotingCommand">
+      <point x="0.0" y="-17.5" />
+      <point x="0.0" y="17.5" />
+    </edge>
+    <edge source="com.alipay.remoting.rpc.ResponseCommand" target="com.alipay.remoting.rpc.RpcCommand">
+      <point x="0.0" y="-17.5" />
+      <point x="655.25" y="230.0" />
+      <point x="469.875" y="230.0" />
+      <point x="34.5" y="17.5" />
+    </edge>
+    <edge source="com.alipay.remoting.rpc.protocol.RpcRequestCommand" target="com.alipay.remoting.rpc.RequestCommand">
+      <point x="0.0" y="-17.5" />
+      <point x="100.5" y="315.0" />
+      <point x="165.25" y="315.0" />
+      <point x="-43.5" y="17.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="441.0" y="187.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -14,23 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting;
 
-import java.util.List;
+package com.alipay.remoting;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.List;
+
 /**
  * Decode command.
- * 
+ *
+ * 协议命令解码器
+ *
  * @author jiangping
  * @version $Id: CommandDecoder.java, v 0.1 Mar 10, 2016 11:32:46 AM jiangping Exp $
  */
 public interface CommandDecoder {
     /**
      * Decode bytes into object.
-     * 
+     *
      * @param ctx
      * @param in
      * @param out

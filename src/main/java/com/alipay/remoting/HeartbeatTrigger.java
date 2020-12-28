@@ -14,13 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
 
 import io.netty.channel.ChannelHandlerContext;
 
 /**
  * Heartbeat triggers here.
- * 
+ *
+ * 心跳的处理器，用户用户拓展特定的心跳机制的处理。
+ *
  * @author jiangping
  * @version $Id: HeartbeatTrigger.java, v 0.1 2015-12-14 PM3:40:38 tao Exp $
  */

@@ -14,13 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
 
 import java.net.InetSocketAddress;
 
 /**
  * Command factory
- * 
+ *
+ * 协议命令工厂类，负责创建协议命令对象。
+ *
  * @author xiaomin.cxm
  * @version $Id: CommandFactory.java, v 0.1 Mar 10, 2016 11:24:24 AM yunliang.shi Exp $
  */
@@ -40,6 +43,7 @@ public interface CommandFactory {
 
     /**
      * create a normal response with response object
+     *
      * @param responseObject
      * @param requestCmd
      * @param <T>

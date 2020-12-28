@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting.rpc;
 
-import java.util.concurrent.ConcurrentHashMap;
+package com.alipay.remoting.rpc;
 
 import com.alipay.remoting.Connection;
 import com.alipay.remoting.InvokeContext;
@@ -25,20 +24,22 @@ import com.alipay.remoting.ProtocolCode;
 import com.alipay.remoting.ProtocolManager;
 import com.alipay.remoting.RemotingContext;
 import com.alipay.remoting.rpc.protocol.UserProcessor;
-
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Dispatch messages to corresponding protocol.
- * 
+ *
  * @author jiangping
  * @version $Id: RpcHandler.java, v 0.1 2015-12-14 PM4:01:37 tao Exp $
  */
 @ChannelHandler.Sharable
 public class RpcHandler extends ChannelInboundHandlerAdapter {
-    private boolean                                     serverSide;
+
+    private boolean serverSide;
 
     private ConcurrentHashMap<String, UserProcessor<?>> userProcessors;
 
@@ -58,9 +59,12 @@ public class RpcHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        // 首先从连接的上下文中获取使用的协议的版本 ProtocolCode
         ProtocolCode protocolCode = ctx.channel().attr(Connection.PROTOCOL).get();
+        // 根据ProtocolCode从ProtocolManager中获取具体的协议
         Protocol protocol = ProtocolManager.getProtocol(protocolCode);
+        // 从协议中获取CommandHandler，并构造请求的上下文信息和请求的对象（代码片段中的msg）提交处理
         protocol.getCommandHandler().handleCommand(
-            new RemotingContext(ctx, new InvokeContext(), serverSide, userProcessors), msg);
+                new RemotingContext(ctx, new InvokeContext(), serverSide, userProcessors), msg);
     }
 }

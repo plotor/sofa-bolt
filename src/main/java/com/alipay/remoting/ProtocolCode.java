@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
 
 import java.util.Arrays;
@@ -21,6 +22,8 @@ import java.util.Arrays;
 /**
  * Protocol code definition, you can define your own protocol code in byte array {@link ProtocolCode#version}
  * We suggest to use just one byte for simplicity.
+ *
+ * 协议标识
  *
  * @author tsui
  * @version $Id: ProtocolCode.java, v 0.1 2018-03-27 17:23 tsui Exp $
@@ -39,6 +42,7 @@ public class ProtocolCode {
 
     /**
      * get the first single byte if your protocol code is single code.
+     *
      * @return
      */
     public byte getFirstByte() {

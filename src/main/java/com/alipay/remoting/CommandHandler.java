@@ -14,20 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alipay.remoting;
 
 import java.util.concurrent.ExecutorService;
 
 /**
  * Command handler.
- * 
+ *
+ * 协议命令的处理器，命令处理入口，负责分发、处理命令。
+ *
  * @author jiangping
  * @version $Id: CommandHandler.java, v 0.1 2015-12-14 PM4:03:55 tao Exp $
  */
 public interface CommandHandler {
+
     /**
      * Handle the command.
-     * 
+     *
      * @param ctx
      * @param msg
      * @throws Exception
@@ -36,7 +40,7 @@ public interface CommandHandler {
 
     /**
      * Register processor for command with specified code.
-     * 
+     *
      * @param cmd
      * @param processor
      */
@@ -44,7 +48,7 @@ public interface CommandHandler {
 
     /**
      * Register default executor for the handler.
-     * 
+     *
      * @param executor
      */
     void registerDefaultExecutor(ExecutorService executor);

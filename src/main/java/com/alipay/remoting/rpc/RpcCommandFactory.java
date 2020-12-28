@@ -33,6 +33,7 @@ import java.net.InetSocketAddress;
  * @version $Id: RpcCommandFactory.java, v 0.1 2018-03-27 21:37 tsui Exp $
  */
 public class RpcCommandFactory implements CommandFactory {
+
     @Override
     public RpcRequestCommand createRequestCommand(Object requestObject) {
         return new RpcRequestCommand(requestObject);
