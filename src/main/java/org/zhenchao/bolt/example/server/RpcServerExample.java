@@ -23,12 +23,7 @@ public class RpcServerExample {
         } else {
             System.out.println("server start failed!");
         }
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                server.getRpcServer().shutdown();
-            }
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> server.getRpcServer().shutdown()));
     }
 
 }

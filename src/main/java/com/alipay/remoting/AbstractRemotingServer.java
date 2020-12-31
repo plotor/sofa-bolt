@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.remoting;
 
-import java.net.InetSocketAddress;
+package com.alipay.remoting;
 
 import com.alipay.remoting.config.BoltOption;
 import com.alipay.remoting.config.BoltOptions;
@@ -25,12 +24,13 @@ import com.alipay.remoting.config.Configurable;
 import com.alipay.remoting.config.ConfigurableInstance;
 import com.alipay.remoting.config.configs.ConfigContainer;
 import com.alipay.remoting.config.configs.ConfigItem;
+import com.alipay.remoting.config.configs.ConfigType;
 import com.alipay.remoting.config.configs.DefaultConfigContainer;
 import com.alipay.remoting.config.switches.GlobalSwitch;
+import com.alipay.remoting.log.BoltLoggerFactory;
 import org.slf4j.Logger;
 
-import com.alipay.remoting.config.configs.ConfigType;
-import com.alipay.remoting.log.BoltLoggerFactory;
+import java.net.InetSocketAddress;
 
 /**
  * Server template for remoting.
@@ -39,16 +39,16 @@ import com.alipay.remoting.log.BoltLoggerFactory;
  * @version $Id: AbstractRemotingServer.java, v 0.1 2015-9-5 PM7:37:48 tao Exp $
  */
 public abstract class AbstractRemotingServer extends AbstractLifeCycle implements RemotingServer,
-                                                                      ConfigurableInstance {
+                                                                                  ConfigurableInstance {
 
-    private static final Logger   logger = BoltLoggerFactory.getLogger("CommonDefault");
+    private static final Logger logger = BoltLoggerFactory.getLogger("CommonDefault");
 
-    private String                ip;
-    private int                   port;
+    private String ip;
+    private int port;
 
-    private final BoltOptions     options;
-    private final ConfigType      configType;
-    private final GlobalSwitch    globalSwitch;
+    private final BoltOptions options;
+    private final ConfigType configType;
+    private final GlobalSwitch globalSwitch;
     private final ConfigContainer configContainer;
 
     public AbstractRemotingServer(int port) {
@@ -58,7 +58,7 @@ public abstract class AbstractRemotingServer extends AbstractLifeCycle implement
     public AbstractRemotingServer(String ip, int port) {
         if (port < 0 || port > 65535) {
             throw new IllegalArgumentException(String.format(
-                "Illegal port value: %d, which should between 0 and 65535.", port));
+                    "Illegal port value: %d, which should between 0 and 65535.", port));
         }
         this.ip = ip;
         this.port = port;
@@ -91,6 +91,7 @@ public abstract class AbstractRemotingServer extends AbstractLifeCycle implement
 
     @Override
     public void startup() throws LifeCycleException {
+        // 设置启动标记，避免重复启动
         super.startup();
 
         try {
@@ -129,6 +130,7 @@ public abstract class AbstractRemotingServer extends AbstractLifeCycle implement
 
     /**
      * override the random port zero with the actual binding port value.
+     *
      * @param port local binding port
      */
     protected void setLocalBindingPort(int port) {

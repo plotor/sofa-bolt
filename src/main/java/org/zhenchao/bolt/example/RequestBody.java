@@ -112,7 +112,7 @@ public class RequestBody implements Serializable {
         return "Body[this.id = " + id + ", this.msg = " + msg + "]";
     }
 
-    static public enum InvokeType {
+    public enum InvokeType {
         ONEWAY,
         SYNC,
         FUTURE,

@@ -210,6 +210,7 @@ public class RpcServer extends AbstractRemotingServer {
         super(port);
         /* server connection management feature enabled or not, default value false, means disabled. */
         if (manageConnection) {
+            // 打开 MANAGE_CONNECTION 开关
             this.switches().turnOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH);
         }
     }
@@ -257,6 +258,8 @@ public class RpcServer extends AbstractRemotingServer {
         if (this.addressParser == null) {
             this.addressParser = new RpcAddressParser();
         }
+
+        // 如果启动了 MANAGE_CONNECTION 开关
         if (this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
             // in server side, do not care the connection service state, so use null instead of global switch
             ConnectionSelectStrategy connectionSelectStrategy = new RandomSelectStrategy(null);
